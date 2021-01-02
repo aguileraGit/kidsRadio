@@ -18,6 +18,11 @@ class kidsRadioApp:
         #Named KidsRadioPlaylist on the Spotify App
         self.kidsPlayList = '4CmKflD5wTahQ3iNJCMu2j'
 
+        #Init volume variables
+        self.volumeUpperLimit = 90
+        self.volume = None
+        self.getVolume()
+
     #Print playlist
     def printPlaylist(self):
         for items in playList.items:
@@ -30,6 +35,7 @@ class kidsRadioApp:
         devices = self.spotify.playback_devices()
 
         for device in devices:
+            print(device)
             #Ignore if the kids radio is playing
             if device.is_active and device.id != self.rPiSpotifyDevice:
                 return True
@@ -55,6 +61,40 @@ class kidsRadioApp:
         self.spotify.playback_start_context(playlistURI, 0, 0, self.rPiSpotifyDevice)
 
 
+    #Get volume for device
+    def getVolume(self):
+        devices = self.spotify.playback_devices()
+
+        for device in devices:
+            if device.id == self.rPiSpotifyDevice:
+                self.volume = device.volume_percent
+                print('Volume: ', self.volume)
+
+
+    def increaseVolume(self, amount):
+        #See if limit is reached
+        if self.volume + amount > self.volumeUpperLimit:
+            self.volume = self.volumeUpperLimit
+        else:
+            self.volume = self.volume + amount
+
+        self.setVolume()
+
+
+    def decreaseVolume(self, amount):
+        #See if limit is reached
+        if self.volume - amount <= 0:
+            self.volume = 0
+        else:
+            self.volume = self.volume - amount
+
+        self.setVolume()
+
+
+    def setVolume(self):
+        self.spotify.playback_volume(self.volume, self.rPiSpotifyDevice)
+
+
 #### App Start ####
 radio = kidsRadioApp()
 
@@ -75,14 +115,20 @@ while inputChar != 'x':
 
         #Before taking any action, check to see if somebody else is using Spotify
         if radio.areDevicesActive() == False:
+
+            #Get volume
+            radio.getVolume()
+
             #Radio is free
             if status == 'pause':
                 status = 'play'
+                '''
                 #Check to see if kids previously paused the radio
                 if radio.isActive():
                     radio.spotify.playback_resume()
                 else:
                     radio.loadShuffleAndPlay()
+                '''
             else:
                 status = 'pause'
                 radio.spotify.playback_pause(radio.rPiSpotifyDevice)
@@ -103,5 +149,12 @@ while inputChar != 'x':
     #Exit
     elif inputChar == 'x':
         print('Exit')
+    #Volume Up
+    elif inputChar == 'u':
+        radio.increaseVolume(10)
+    #Volume Down
+    elif inputChar == 'd':
+        radio.decreaseVolume(10)
+
     else:
         print('Unknown')
