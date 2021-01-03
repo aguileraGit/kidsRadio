@@ -95,6 +95,56 @@ class kidsRadioApp:
         self.spotify.playback_volume(self.volume, self.rPiSpotifyDevice)
 
 
+### App Functions - Required to easily use the button decorators ###
+
+def printMenu():
+    print('h: Help\np: Pause/Play\nn: Next')
+
+
+def playPause():
+    global status
+    #Before taking any action, check to see if somebody else is using Spotify
+    if radio.areDevicesActive() == False:
+
+        #Get volume
+        radio.getVolume()
+
+        #Radio is free
+        if status == 'pause':
+            status = 'play'
+            '''
+            #Check to see if kids previously paused the radio
+            if radio.isActive():
+                radio.spotify.playback_resume()
+            else:
+                radio.loadShuffleAndPlay()
+            '''
+        else:
+            status = 'pause'
+            radio.spotify.playback_pause(radio.rPiSpotifyDevice)
+
+        print(status)
+    #Sombody is using Spotify.
+    else:
+        print('Spotify is being used by Mom or Dad')
+
+def nextTrack():
+    print('Next')
+    radio.spotify.playback_next(radio.rPiSpotifyDevice)
+
+def previousTrack():
+    print('Previous')
+    radio.spotify.playback_previous(radio.rPiSpotifyDevice)
+
+def exitApp():
+    print('Exit')
+
+def volumeUp():
+    radio.increaseVolume(10)
+
+def volumeDown():
+    radio.decreaseVolume(10)
+
 #### App Start ####
 radio = kidsRadioApp()
 
@@ -108,53 +158,31 @@ while inputChar != 'x':
 
     #Help Menu
     if inputChar == 'h':
-        inputChar = None
-        print('h: Help\np: Pause/Play\nn: Next')
+        printMenu()
+
     #Play/Pause
     elif inputChar == 'p':
-
-        #Before taking any action, check to see if somebody else is using Spotify
-        if radio.areDevicesActive() == False:
-
-            #Get volume
-            radio.getVolume()
-
-            #Radio is free
-            if status == 'pause':
-                status = 'play'
-                '''
-                #Check to see if kids previously paused the radio
-                if radio.isActive():
-                    radio.spotify.playback_resume()
-                else:
-                    radio.loadShuffleAndPlay()
-                '''
-            else:
-                status = 'pause'
-                radio.spotify.playback_pause(radio.rPiSpotifyDevice)
-
-            print(status)
-        #Sombody is using Spotify.
-        else:
-            print('Spotify is being used by Mom or Dad')
+        playPause()
 
     #Next track
     elif inputChar == 'n':
-        print('Next')
-        radio.spotify.playback_next(radio.rPiSpotifyDevice)
+        nextTrack()
+
     #Previous track
     elif inputChar == 'v':
-        print('Previous')
-        radio.spotify.playback_previous(radio.rPiSpotifyDevice)
+        previousTrack()
+
     #Exit
     elif inputChar == 'x':
-        print('Exit')
+        exitApp()
+
     #Volume Up
     elif inputChar == 'u':
-        radio.increaseVolume(10)
+        volumeUp()
+
     #Volume Down
     elif inputChar == 'd':
-        radio.decreaseVolume(10)
+        volumeDown()
 
     else:
         print('Unknown')
