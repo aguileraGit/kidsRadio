@@ -154,6 +154,7 @@ radio = kidsRadioApp()
 
 signal.pause()
 status = 'pause'
+global status
 
 '''
 #Test app by using the keyboard
