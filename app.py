@@ -103,7 +103,7 @@ def printMenu():
     print('h: Help\np: Pause/Play\nn: Next')
 
 @phatbeat.on(phatbeat.BTN_PLAYPAUSE)
-def playPause():
+def playPause(pin):
     global status
     #Before taking any action, check to see if somebody else is using Spotify
     if radio.areDevicesActive() == False:
@@ -131,12 +131,12 @@ def playPause():
         print('Spotify is being used by Mom or Dad')
 
 @phatbeat.on(phatbeat.BTN_FASTFWD)
-def nextTrack():
+def nextTrack(pin):
     print('Next')
     radio.spotify.playback_next(radio.rPiSpotifyDevice)
 
 @phatbeat.on(phatbeat.BTN_REWIND)
-def previousTrack():
+def previousTrack(pin):
     print('Previous')
     radio.spotify.playback_previous(radio.rPiSpotifyDevice)
 
@@ -144,11 +144,11 @@ def exitApp():
     print('Exit')
 
 @phatbeat.on(phatbeat.BTN_VOLUP)
-def volumeUp():
+def volumeUp(pin):
     radio.increaseVolume(10)
 
 @phatbeat.on(phatbeat.BTN_VOLDN)
-def volumeDown():
+def volumeDown(pin):
     radio.decreaseVolume(10)
 
 #### App Start ####
