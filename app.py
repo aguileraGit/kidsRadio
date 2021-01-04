@@ -69,7 +69,7 @@ class kidsRadioApp:
 
         for device in devices:
             if device.id == self.rPiSpotifyDevice:
-                self.volume = device.volume_percent
+                self.volume = int(device.volume_percent)
                 print('Volume: ', self.volume)
 
 
@@ -114,13 +114,11 @@ def playPause(pin):
         #Radio is free
         if status == 'pause':
             status = 'play'
-            '''
             #Check to see if kids previously paused the radio
             if radio.isActive():
                 radio.spotify.playback_resume()
             else:
                 radio.loadShuffleAndPlay()
-            '''
         else:
             status = 'pause'
             radio.spotify.playback_pause(radio.rPiSpotifyDevice)
@@ -155,6 +153,7 @@ def volumeDown(pin):
 radio = kidsRadioApp()
 
 signal.pause()
+status = 'pause'
 
 '''
 #Test app by using the keyboard
