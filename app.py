@@ -1,4 +1,6 @@
 import tekore as tk
+import signal
+import phatbeat
 
 print('Starting....')
 
@@ -100,7 +102,7 @@ class kidsRadioApp:
 def printMenu():
     print('h: Help\np: Pause/Play\nn: Next')
 
-
+@phatbeat.on(phatbeat.BTN_PLAYPAUSE)
 def playPause():
     global status
     #Before taking any action, check to see if somebody else is using Spotify
@@ -128,10 +130,12 @@ def playPause():
     else:
         print('Spotify is being used by Mom or Dad')
 
+@phatbeat.on(phatbeat.BTN_FASTFWD)
 def nextTrack():
     print('Next')
     radio.spotify.playback_next(radio.rPiSpotifyDevice)
 
+@phatbeat.on(phatbeat.BTN_REWIND)
 def previousTrack():
     print('Previous')
     radio.spotify.playback_previous(radio.rPiSpotifyDevice)
@@ -139,15 +143,20 @@ def previousTrack():
 def exitApp():
     print('Exit')
 
+@phatbeat.on(phatbeat.BTN_VOLUP)
 def volumeUp():
     radio.increaseVolume(10)
 
+@phatbeat.on(phatbeat.BTN_VOLDN)
 def volumeDown():
     radio.decreaseVolume(10)
 
 #### App Start ####
 radio = kidsRadioApp()
 
+signal.pause()
+
+'''
 #Test app by using the keyboard
 inputChar = 'p'
 status = 'pause'
@@ -186,3 +195,4 @@ while inputChar != 'x':
 
     else:
         print('Unknown')
+'''
