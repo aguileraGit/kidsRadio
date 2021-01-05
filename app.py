@@ -152,9 +152,12 @@ def volumeDown(pin):
 #### App Start ####
 radio = kidsRadioApp()
 
-signal.pause()
+#signal.pause()
+
+#global status
 status = 'pause'
-global status
+
+signal.pause()
 
 '''
 #Test app by using the keyboard
