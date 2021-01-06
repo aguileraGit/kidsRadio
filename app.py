@@ -121,6 +121,8 @@ def playPause(pin):
                 radio.loadShuffleAndPlay()
         else:
             status = 'pause'
+            #Need to get position
+            currentPostion = radio.spotify.playback_currently_playing().timestamp
             radio.spotify.playback_pause(radio.rPiSpotifyDevice)
 
         print(status)
@@ -152,12 +154,15 @@ def volumeDown(pin):
 #### App Start ####
 radio = kidsRadioApp()
 
-#signal.pause()
+#Set volume
+radio.setVolume(50)
 
 #global status
 status = 'pause'
 
+#Pause and wait for buttons
 signal.pause()
+
 
 '''
 #Test app by using the keyboard

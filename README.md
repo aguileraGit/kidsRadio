@@ -31,3 +31,9 @@ I ran this on a seperate machine since the RPi is headless. The tekore.cfg file 
 Edit the self.rPiSpotifyDevice with the ID of the RPi Radio. You can use the configured.py to list all your devices.
 
 Get the playlist name by copying the link (Three dots) from the Spotify App/Web and paste to a text file. Extract the playlist ID (first set of numbers/letters).
+
+## References
+- https://github.com/pimoroni/phat-beat/tree/91821cf0ba05465d23c241694ba0b5a66986f711
+- https://forums.pimoroni.com/t/phatbeat-library-clash-with-cleanshutdown/6675
+- https://stackoverflow.com/questions/47291633/repeating-a-function-in-a-background-thread-every-n-seconds
+- 
