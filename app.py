@@ -59,7 +59,7 @@ class kidsRadioApp:
             if device.id == self.rPiSpotifyDevice:
                 if device.is_active == True:
                     return True
-            return False
+        return False
 
 
     #Shuffle playlist and start a song
@@ -223,8 +223,8 @@ status = 'init'
 # of the song being played. If the device is no longer active, it sets the
 # status to taken over. When the Play/Pause button is pressed, it will add
 # the last song to the queue (and time) and resume.
-checkStatusBackground = RepeatingTimer(8, updateStatus)
-checkStatusBackground.start()
+#checkStatusBackground = RepeatingTimer(8, updateStatus)
+#checkStatusBackground.start()
 
 #Pause and wait for buttons
 signal.pause() #Uncomment when using buttons
