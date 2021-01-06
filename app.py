@@ -1,6 +1,7 @@
 import tekore as tk
 import signal
 import threading
+import phatbeat
 
 print('Starting....')
 
