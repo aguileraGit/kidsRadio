@@ -37,7 +37,7 @@ class kidsRadioApp:
 
 
     #Check for active device. Returns False if no device is active
-    def areDevicesActive(self):
+    def areOtherDevicesActive(self):
         #Get all possible devices that could be using Spotify
         devices = self.spotify.playback_devices()
 
@@ -50,8 +50,8 @@ class kidsRadioApp:
         return False
 
 
-    #Check to see if track is playing on radio. Returns True if active
-    def isActive(self):
+    #Check to see if track is playing on kids' radio. Returns True if active
+    def isTrackActive(self):
         devices = self.spotify.playback_devices()
 
         for device in devices:
@@ -129,10 +129,12 @@ class RepeatingTimer(threading.Thread):
     def stop(self):
         self.stop_event.set()
 
+
 ### App Functions - Required to easily use the button decorators ###
 
 def printMenu():
     print('h: Help\np: Pause/Play\nn: Next')
+
 
 @phatbeat.on(phatbeat.BTN_PLAYPAUSE)
 def playPause(pin):
@@ -142,7 +144,7 @@ def playPause(pin):
     #checkStatusBackground.stop()
 
     #Before taking any action, check to see if somebody else is using Spotify
-    if radio.areDevicesActive() == False:
+    if radio.areOtherDevicesActive() == False:
 
         #Get volume
         radio.getVolume()
@@ -151,7 +153,7 @@ def playPause(pin):
         if status == 'pause':
             status = 'play'
             #Check to see if kids previously paused the radio and resume
-            if radio.isActive():
+            if radio.isTrackActive():
                 print('Resuming from paused state...')
                 radio.spotify.playback_seek(radio.pausedPosition, radio.rPiSpotifyDevice)
                 radio.spotify.playback_resume()
@@ -202,8 +204,15 @@ def volumeDown(pin):
 def updateStatus():
     global status, radio
     print('Background Check')
+
+    #Per note below. If parents have taken over Spotify, save and pause
+    if areOtherDevicesActive() == True:
+        print('Parents took over')
+        radio.saveData()
+        status = 'pause'
+
     #If the current device is active
-    if radio.isActive():
+    if radio.isTrackActive():
         #Save the current song ID and postion
         radio.saveData()
     else:
@@ -218,13 +227,14 @@ radio = kidsRadioApp()
 #global status
 status = 'init'
 
-#Probably need a background function to catch when Spotify is taken over
-# by the parents. Runs every few seconds and gets the last song and position
-# of the song being played. If the device is no longer active, it sets the
-# status to taken over. When the Play/Pause button is pressed, it will add
-# the last song to the queue (and time) and resume.
-#checkStatusBackground = RepeatingTimer(8, updateStatus)
-#checkStatusBackground.start()
+#Background Thread - Runs every few seconds and gets the last song and position
+# of the song being played. If the device is no longer active (aka been taken
+# over by a parent), it sets the status pause. When the Play/Pause button is
+# pressed, it will (1) check to see if it's free and (2) resume song from the
+# queue.
+
+checkStatusBackground = RepeatingTimer(3, updateStatus)
+checkStatusBackground.start()
 
 #Pause and wait for buttons
 signal.pause() #Uncomment when using buttons
