@@ -206,7 +206,7 @@ def updateStatus():
     print('Background Check')
 
     #Per note below. If parents have taken over Spotify, save and pause
-    if areOtherDevicesActive() == True:
+    if radio.areOtherDevicesActive() == True:
         print('Parents took over')
         radio.saveData()
         status = 'pause'
