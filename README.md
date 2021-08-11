@@ -3,7 +3,7 @@
 ## Required Hardware and Software
 - HW: Pimoroni Pirate Radio from [Adafruit](https://www.adafruit.com/product/3477)
 - SW: [raspotify](https://github.com/dtcooper/raspotify) + this Git Repo + [Tekore](https://tekore.readthedocs.io/en/stable/index.html)
-Spotify account
+- Paid Spotify account
 
 ## Setup
 
@@ -32,8 +32,12 @@ Edit the self.rPiSpotifyDevice with the ID of the RPi Radio. You can use the con
 
 Get the playlist name by copying the link (Three dots) from the Spotify App/Web and paste to a text file. Extract the playlist ID (first set of numbers/letters).
 
+Stop the process cleanshutd from running. This will force the rPi to reboot.
+
+### Just a player
+One issue I've run into is the RPi only acts like a player after it's been found by Spotify. In order words, you have to go find the RPi Spotify Device in the Spotify App. It's unclear how long Spotify is aware of the player. It seems from time to time, the RPi player disappears. The app then crashes since it relies on the RPi player being present.
+
 ## References
 - https://github.com/pimoroni/phat-beat/tree/91821cf0ba05465d23c241694ba0b5a66986f711
 - https://forums.pimoroni.com/t/phatbeat-library-clash-with-cleanshutdown/6675
 - https://stackoverflow.com/questions/47291633/repeating-a-function-in-a-background-thread-every-n-seconds
-- 
