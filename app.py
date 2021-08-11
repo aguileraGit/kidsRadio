@@ -64,10 +64,13 @@ class kidsRadioApp:
 
     #Shuffle playlist and start a song
     def loadShuffleAndPlay(self):
-        self.spotify.playback_shuffle(True, self.rPiSpotifyDevice)
+        self.setToShuffle()
         playlistURI = tk.to_uri('playlist', self.kidsPlayList)
         self.spotify.playback_start_context(playlistURI, 0, 0, self.rPiSpotifyDevice)
 
+
+    def setToShuffle(self):
+        self.spotify.playback_shuffle(True, self.rPiSpotifyDevice)
 
     #Get volume for device
     def getVolume(self):
@@ -140,9 +143,6 @@ def printMenu():
 def playPause(pin):
     global status, checkStatusBackground, radio
 
-    #Stop the background task
-    #checkStatusBackground.stop()
-
     #Before taking any action, check to see if somebody else is using Spotify
     if radio.areOtherDevicesActive() == False:
 
@@ -156,9 +156,6 @@ def playPause(pin):
             if radio.isTrackActive():
                 print('Resuming from paused state...')
                 radio.spotify.playback_seek(radio.pausedPosition, radio.rPiSpotifyDevice)
-
-                #Loses status of the RPi as a valid device!
-
                 radio.spotify.playback_resume()
 
             else:
@@ -211,7 +208,6 @@ def updateStatus():
     #Per note below. If parents have taken over Spotify, save and pause
     if radio.areOtherDevicesActive() == True:
         print('Parents took over')
-        #radio.saveData()
         status = 'pause'
 
     #If the current device is active
@@ -226,6 +222,9 @@ def updateStatus():
 
 #### App Start ####
 radio = kidsRadioApp()
+
+#Ensure Shuffle is on
+radio.setToShuffle()
 
 #global status
 status = 'init'
