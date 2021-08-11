@@ -2,6 +2,7 @@ import tekore as tk
 import signal
 import threading
 import phatbeat
+from datetime import datetime, time
 
 print('Starting....')
 
@@ -144,7 +145,9 @@ def playPause(pin):
     global status, checkStatusBackground, radio
 
     #Before taking any action, check to see if somebody else is using Spotify
-    if radio.areOtherDevicesActive() == False:
+    # Also check time
+    if (radio.areOtherDevicesActive() == False) and
+       (is_time_between(allowedTimeOn, allowedTimeOff) == True):
 
         #Get volume
         radio.getVolume()
@@ -177,7 +180,6 @@ def playPause(pin):
     else:
         print('Spotify is being used by Mom or Dad')
 
-    #checkStatusBackground.start()
 
 @phatbeat.on(phatbeat.BTN_FASTFWD)
 def nextTrack(pin):
@@ -219,6 +221,16 @@ def updateStatus():
         print('Device not active. Pausing...')
         status = 'pause'
 
+#Helper function to make sure the radio isn't on too early or late
+# https://stackoverflow.com/questions/10048249/how-do-i-determine-if-current-time-is-within-a-specified-range-using-pythons-da
+def is_time_between(begin_time, end_time, check_time=None):
+    # If check time is not given, default to current UTC time
+    check_time = check_time or datetime.utcnow().time()
+    if begin_time < end_time:
+        return check_time >= begin_time and check_time <= end_time
+    else: # crosses midnight
+        return check_time >= begin_time or check_time <= end_time
+
 
 #### App Start ####
 radio = kidsRadioApp()
@@ -228,6 +240,10 @@ radio.setToShuffle()
 
 #global status
 status = 'init'
+
+#Put time limits
+allowedTimeOn = time(8,0)
+allowedTimeOff = time(19,15)
 
 #Background Thread - Runs every few seconds and gets the last song and position
 # of the song being played. If the device is no longer active (aka been taken
