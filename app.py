@@ -156,6 +156,9 @@ def playPause(pin):
             if radio.isTrackActive():
                 print('Resuming from paused state...')
                 radio.spotify.playback_seek(radio.pausedPosition, radio.rPiSpotifyDevice)
+
+                #Loses status of the RPi as a valid device!
+
                 radio.spotify.playback_resume()
 
             else:
@@ -208,7 +211,7 @@ def updateStatus():
     #Per note below. If parents have taken over Spotify, save and pause
     if radio.areOtherDevicesActive() == True:
         print('Parents took over')
-        radio.saveData()
+        #radio.saveData()
         status = 'pause'
 
     #If the current device is active
