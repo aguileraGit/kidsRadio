@@ -25,7 +25,7 @@ class kidsRadioApp:
         #Init volume variables and set volume
         self.volumeUpperLimit = 80
         self.volume = 0
-        self.setVolume()
+        #self.setVolume() #Crashes if RPI isn't found
 
         #Paused information
         self.pausedTrackID = None
@@ -45,10 +45,28 @@ class kidsRadioApp:
         for device in devices:
             #print(device)
             #Ignore if the kids radio is playing
-            if device.is_active and device.id != self.rPiSpotifyDevice:
+            #if device.is_active and device.id != self.rPiSpotifyDevice:
+            #    return True
+
+            #Check to see if the device is actually playing something
+            if (device.Spotify.playback_currently_playing.is_playing) and
+               (device.id != self.rPiSpotifyDevice):
                 return True
 
         return False
+
+
+    #Check to see if RPi is available. Returns True if present
+    def isKidsRadioPresent(self):
+        devices = self.spotify.playback_devices()
+
+        for device in devices:
+            #Ignore if the kids radio is playing
+            if device.id != self.rPiSpotifyDevice:
+                return True
+
+        return False
+
 
 
     #Check to see if track is playing on kids' radio. Returns True if active
@@ -234,6 +252,15 @@ def is_time_between(begin_time, end_time, check_time=None):
 
 #### App Start ####
 radio = kidsRadioApp()
+
+#Check to make sure device is present. Failure crashes app.
+while( radio.isKidsRadioPresent() == False ):
+    time.sleep(15)
+
+#Set volume
+radio.volume = 0
+radio.setVolume()
+
 
 #Ensure Shuffle is on
 radio.setToShuffle()
