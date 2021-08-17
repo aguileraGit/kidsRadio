@@ -2,6 +2,7 @@ import tekore as tk
 import signal
 import threading
 import phatbeat
+import time
 from datetime import datetime, time
 
 print('Starting....')
@@ -49,7 +50,7 @@ class kidsRadioApp:
             #    return True
 
             #Check to see if the device is actually playing something
-            if (device.Spotify.playback_currently_playing.is_playing) and
+            if (device.Spotify.playback_currently_playing.is_playing) and\
                (device.id != self.rPiSpotifyDevice):
                 return True
 
