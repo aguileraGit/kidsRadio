@@ -50,7 +50,7 @@ class kidsRadioApp:
             #    return True
 
             #Check to see if the device is actually playing something
-            if (device.Spotify.playback_currently_playing.is_playing) and\
+            if (device.is_active) and\
                (device.id != self.rPiSpotifyDevice):
                 return True
 
@@ -165,8 +165,9 @@ def playPause(pin):
 
     #Before taking any action, check to see if somebody else is using Spotify
     # Also check time
-    if (radio.areOtherDevicesActive() == False) and
-       (is_time_between(allowedTimeOn, allowedTimeOff) == True):
+    #if (radio.areOtherDevicesActive() == False) and\
+    #if (is_time_between(allowedTimeOn, allowedTimeOff) == True):
+    if True:
 
         #Get volume
         radio.getVolume()
@@ -230,11 +231,11 @@ def updateStatus():
     if (radio.isKidsRadioPresent() == False):
         print('Kids Radio not present')
         return False
-    
+
     #Parents have taken over Spotify, save and pause
-    if radio.areOtherDevicesActive() == True:
-        print('Parents took over')
-        status = 'pause'
+    #if radio.areOtherDevicesActive() == True:
+    #    print('Parents took over')
+    #    status = 'pause'
 
     #If the current device is active
     if radio.isTrackActive():
@@ -264,17 +265,17 @@ while( radio.isKidsRadioPresent() == False ):
     print('Waiting for Kids Radio to appear online')
     timeOG.sleep(15)
 
-    
+
 #Give the RPi 10 seconds to filter through the Spotify system
 timeOG.sleep(10)
 
 #Set volume
-radio.volume = 0
-radio.setVolume()
+#radio.volume = 0
+#radio.setVolume()
 
 
 #Ensure Shuffle is on
-radio.setToShuffle()
+#radio.setToShuffle()
 
 #global status
 status = 'init'
@@ -289,7 +290,7 @@ allowedTimeOff = time(19,15)
 # pressed, it will (1) check to see if it's free and (2) resume song from the
 # queue.
 
-checkStatusBackground = RepeatingTimer(3, updateStatus)
+checkStatusBackground = RepeatingTimer(10, updateStatus)
 checkStatusBackground.start()
 
 #Pause and wait for buttons
