@@ -2,8 +2,8 @@ import tekore as tk
 import signal
 import threading
 import phatbeat
-import time as timeOG #Need to clean this up. Using import below.
-from datetime import datetime, time
+import time
+import datetime
 
 print('Starting....')
 
@@ -255,11 +255,11 @@ radio = kidsRadioApp()
 #Check to make sure device is present. Failure crashes app.
 while( radio.isKidsRadioPresent() == False ):
     print('Waiting for Kids Radio to appear online')
-    timeOG.sleep(15)
+    time.sleep(15)
 
 
 #Give the RPi 10 seconds to filter through the Spotify system
-timeOG.sleep(10)
+time.sleep(5)
 
 #Set volume
 #radio.volume = 0
