@@ -86,11 +86,11 @@ class kidsRadioApp:
     def loadShuffleAndPlay(self):
         self.setToShuffle()
         playlistURI = tk.to_uri('playlist', self.kidsPlayList)
-        self.spotify.playback_start_context(playlistURI, 0, 0)
+        self.spotify.playback_start_context(playlistURI, 0, 0, self.rPiSpotifyDevice)
 
 
     def setToShuffle(self):
-        self.spotify.playback_shuffle(True)
+        self.spotify.playback_shuffle(True, self.rPiSpotifyDevice)
 
     #Get volume for device
     def getVolume(self):
@@ -123,7 +123,7 @@ class kidsRadioApp:
 
 
     def setVolume(self):
-        self.spotify.playback_volume(self.volume)
+        self.spotify.playback_volume(self.volume, self.rPiSpotifyDevice)
 
 
     def saveData(self):
@@ -177,7 +177,7 @@ def playPause(pin):
             #Check to see if kids previously paused the radio and resume
             if radio.isTrackActive():
                 print('Resuming from paused state...')
-                radio.spotify.playback_seek(radio.pausedPosition)
+                radio.spotify.playback_seek(radio.pausedPosition, radio.rPiSpotifyDevice)
                 radio.spotify.playback_resume()
 
             else:
@@ -187,7 +187,7 @@ def playPause(pin):
             status = 'pause'
             #Get current song and position
             radio.saveData()
-            radio.spotify.playback_pause()
+            radio.spotify.playback_pause(radio.rPiSpotifyDevice)
 
         elif status == 'init':
             status = 'play'
@@ -203,12 +203,12 @@ def playPause(pin):
 @phatbeat.on(phatbeat.BTN_FASTFWD)
 def nextTrack(pin):
     print('Next')
-    radio.spotify.playback_next()
+    radio.spotify.playback_next(radio.rPiSpotifyDevice)
 
 @phatbeat.on(phatbeat.BTN_REWIND)
 def previousTrack(pin):
     print('Previous')
-    radio.spotify.playback_previous()
+    radio.spotify.playback_previous(radio.rPiSpotifyDevice)
 
 def exitApp():
     print('Exit')
