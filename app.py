@@ -264,6 +264,10 @@ while( radio.isKidsRadioPresent() == False ):
     print('Waiting for Kids Radio to appear online')
     timeOG.sleep(15)
 
+    
+#Give the RPi 10 seconds to filter through the Spotify system
+timeOG.sleep(10)
+
 #Set volume
 radio.volume = 0
 radio.setVolume()
