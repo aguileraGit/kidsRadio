@@ -26,7 +26,6 @@ class kidsRadioApp:
         #Init volume variables and set volume
         self.volumeUpperLimit = 80
         self.volume = 0
-        #self.setVolume() #Crashes if RPI isn't found
 
         #Paused information
         self.pausedTrackID = None
@@ -166,8 +165,7 @@ def playPause(pin):
     #Before taking any action, check to see if somebody else is using Spotify
     # Also check time
     #if (radio.areOtherDevicesActive() == False) and\
-    #if (is_time_between(allowedTimeOn, allowedTimeOff) == True):
-    if True:
+    if (time_in_range(allowedTimeOn, allowedTimeOff) == True):
 
         #Get volume
         radio.getVolume()
@@ -247,15 +245,9 @@ def updateStatus():
         status = 'pause'
 
 #Helper function to make sure the radio isn't on too early or late
-# https://stackoverflow.com/questions/10048249/how-do-i-determine-if-current-time-is-within-a-specified-range-using-pythons-da
-def is_time_between(begin_time, end_time, check_time=None):
-    # If check time is not given, default to current UTC time
-    check_time = check_time or datetime.utcnow().time()
-    if begin_time < end_time:
-        return check_time >= begin_time and check_time <= end_time
-    else: # crosses midnight
-        return check_time >= begin_time or check_time <= end_time
-
+def time_in_range(start, end):
+    current = datetime.datetime.now().time()
+    return start <= current <= end
 
 #### App Start ####
 radio = kidsRadioApp()
@@ -281,8 +273,9 @@ timeOG.sleep(10)
 status = 'init'
 
 #Put time limits
-allowedTimeOn = time(8,0)
-allowedTimeOff = time(19,15)
+allowedTimeOn = datetime.time(8, 0, 0)
+allowedTimeOff = datetime.time(19, 15, 0)
+
 
 #Background Thread - Runs every few seconds and gets the last song and position
 # of the song being played. If the device is no longer active (aka been taken
