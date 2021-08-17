@@ -2,7 +2,7 @@ import tekore as tk
 import signal
 import threading
 import phatbeat
-import time
+import time as timeOG #Need to clean this up. Using import below.
 from datetime import datetime, time
 
 print('Starting....')
@@ -256,7 +256,7 @@ radio = kidsRadioApp()
 
 #Check to make sure device is present. Failure crashes app.
 while( radio.isKidsRadioPresent() == False ):
-    time.sleep(15)
+    timeOG.sleep(15)
 
 #Set volume
 radio.volume = 0
