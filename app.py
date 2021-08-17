@@ -226,7 +226,12 @@ def updateStatus():
     global status, radio
     print('Background Check')
 
-    #Per note below. If parents have taken over Spotify, save and pause
+    #Check to see if device is present
+    if (radio.isKidsRadioPresent() == False):
+        print('Kids Radio not present')
+        return False
+    
+    #Parents have taken over Spotify, save and pause
     if radio.areOtherDevicesActive() == True:
         print('Parents took over')
         status = 'pause'
@@ -256,6 +261,7 @@ radio = kidsRadioApp()
 
 #Check to make sure device is present. Failure crashes app.
 while( radio.isKidsRadioPresent() == False ):
+    print('Waiting for Kids Radio to appear online')
     timeOG.sleep(15)
 
 #Set volume
