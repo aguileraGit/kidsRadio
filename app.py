@@ -43,10 +43,9 @@ class kidsRadioApp:
         devices = self.spotify.playback_devices()
 
         for device in devices:
-            #print(device)
-            #Ignore if the kids radio is playing
-            #if device.is_active and device.id != self.rPiSpotifyDevice:
-            #    return True
+            print(device)
+            
+            print(self.spotify.playback_currently_playing())
 
             #Check to see if the device is actually playing something
             if (device.is_active) and\
@@ -126,12 +125,17 @@ class kidsRadioApp:
 
 
     def saveData(self):
-        current = radio.spotify.playback_currently_playing()
-        self.pausedPosition = current.progress_ms
-        self.pausedTrackID = current.item.id
+        try:
+            current = radio.spotify.playback_currently_playing()
+            self.pausedPosition = current.progress_ms
+            self.pausedTrackID = current.item.id
 
-        print('Saving: ', self.pausedTrackID, self.pausedPosition)
-
+            print('Saving: ', self.pausedTrackID, self.pausedPosition)
+        except Exception as e:
+            print('Exception: {}'.format(str(e)) )
+        finally:
+            pass
+            
 
 #Create a timer. Used to constantly know the current song and position when
 # playing. If Mom or Dad take over, the rPi will no longer be active. Without
@@ -231,17 +235,19 @@ def updateStatus():
         return False
 
     #Parents have taken over Spotify, save and pause
-    #if radio.areOtherDevicesActive() == True:
-    #    print('Parents took over')
-    #    status = 'pause'
+    elif radio.areOtherDevicesActive() == True:
+        print('Parents took over')
+        status = 'pause'
+        return False
 
     #If the current device is active
-    if radio.isTrackActive():
+    elif radio.isTrackActive():
         #Save the current song ID and postion
         radio.saveData()
+        
     else:
         #If not active, set the app status to pause
-        print('Device not active. Pausing...')
+        print('Unsure of status. Pausing...')
         status = 'pause'
 
 #Helper function to make sure the radio isn't on too early or late
@@ -258,23 +264,23 @@ while( radio.isKidsRadioPresent() == False ):
     time.sleep(15)
 
 
-#Give the RPi 10 seconds to filter through the Spotify system
+#Give the RPi time to filter through the Spotify system
 time.sleep(5)
 
 #Set volume
-#radio.volume = 0
-#radio.setVolume()
-
+radio.volume = 10
+radio.setVolume()
 
 #Ensure Shuffle is on
-#radio.setToShuffle()
+radio.setToShuffle()
 
 #global status
 status = 'init'
 
 #Put time limits
 allowedTimeOn = datetime.time(8, 0, 0)
-allowedTimeOff = datetime.time(19, 15, 0)
+#allowedTimeOff = datetime.time(19, 15, 0)
+allowedTimeOff = datetime.time(23, 15, 0)
 
 
 #Background Thread - Runs every few seconds and gets the last song and position
