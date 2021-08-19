@@ -54,10 +54,14 @@ class kidsRadioApp:
                 else:
                     print(playBack)
                     print(type(playBack))
-
+                    
+                    if playBack.is_playing:
+                        return True
+                    '''
                     for pbOpts in playBack:
                         if pbOpts.is_playing:
                             return True
+                    '''
 
         return False
 
