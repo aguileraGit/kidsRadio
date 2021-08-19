@@ -47,8 +47,7 @@ class kidsRadioApp:
 
             #Check to see if the device is actually playing something
             if (device.id != self.rPiSpotifyDevice) and\
-               #(self.spotify.playback_currently_playing() != None) :
-               device.is_active == True:
+               (device.is_active == True):
                 return True
 
         return False
