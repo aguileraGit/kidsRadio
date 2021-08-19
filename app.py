@@ -47,7 +47,8 @@ class kidsRadioApp:
 
             #Check to see if the device is actually playing something
             if (device.id != self.rPiSpotifyDevice) and\
-               (self.spotify.playback_currently_playing() != None) :
+               #(self.spotify.playback_currently_playing() != None) :
+               device.is_active == True:
                 return True
 
         return False
@@ -166,8 +167,8 @@ def playPause(pin):
 
     #Before taking any action, check to see if somebody else is using Spotify
     # Also check time
-    #if (radio.areOtherDevicesActive() == False) and\
-    if (time_in_range(allowedTimeOn, allowedTimeOff) == True):
+    if (radio.areOtherDevicesActive() == False) and\
+       (time_in_range(allowedTimeOn, allowedTimeOff) == True):
 
         #Get volume
         radio.getVolume()
