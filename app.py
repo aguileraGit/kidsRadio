@@ -80,13 +80,18 @@ class kidsRadioApp:
 
     #Shuffle playlist and start a song
     def loadShuffleAndPlay(self):
-        self.setToShuffle()
         playlistURI = tk.to_uri('playlist', self.kidsPlayList)
         self.spotify.playback_start_context(playlistURI, 0, 0, self.rPiSpotifyDevice)
+        self.setToShuffle()
 
 
     def setToShuffle(self):
-        self.spotify.playback_shuffle(True, self.rPiSpotifyDevice)
+        try:
+            self.spotify.playback_shuffle(True, self.rPiSpotifyDevice)
+        except Exception as e:
+            print('Exception: {}'.format(str(e)) )
+        finally:
+            pass
 
     #Get volume for device
     def getVolume(self):
@@ -119,7 +124,12 @@ class kidsRadioApp:
 
 
     def setVolume(self):
-        self.spotify.playback_volume(self.volume, self.rPiSpotifyDevice)
+        try:
+            self.spotify.playback_volume(self.volume, self.rPiSpotifyDevice)
+        except Exception as e:
+            print('Exception: {}'.format(str(e)) )
+        finally:
+            pass
 
 
     def saveData(self):
