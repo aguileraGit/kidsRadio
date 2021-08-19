@@ -48,12 +48,16 @@ class kidsRadioApp:
             #Check to see if the device is actually playing something
             if (device.id != self.rPiSpotifyDevice):
                 playBack = self.spotify.playback_currently_playing()
-                print(playBack)
-                print(type(playBack))
+                
+                if playBack == None:
+                    return False
+                else:
+                    print(playBack)
+                    print(type(playBack))
 
-                for pbOpts in playBack:
-                    if pbOpts.is_playing:
-                        return True
+                    for pbOpts in playBack:
+                        if pbOpts.is_playing:
+                            return True
 
         return False
 
