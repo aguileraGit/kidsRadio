@@ -43,13 +43,11 @@ class kidsRadioApp:
         devices = self.spotify.playback_devices()
 
         for device in devices:
-            print(device)
-            
-            print(self.spotify.playback_currently_playing())
+            #print(device)
 
             #Check to see if the device is actually playing something
-            if (device.is_active) and\
-               (device.id != self.rPiSpotifyDevice):
+            if (device.id != self.rPiSpotifyDevice) and\
+               (self.spotify.playback_currently_playing() != None) :
                 return True
 
         return False
@@ -244,11 +242,13 @@ def updateStatus():
     elif radio.isTrackActive():
         #Save the current song ID and postion
         radio.saveData()
+        return False
         
     else:
         #If not active, set the app status to pause
-        print('Unsure of status. Pausing...')
-        status = 'pause'
+        #print('Unsure of status. Pausing...')
+        #status = 'pause'
+        pass
 
 #Helper function to make sure the radio isn't on too early or late
 def time_in_range(start, end):
